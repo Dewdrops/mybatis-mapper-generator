@@ -1,0 +1,40 @@
+package $package;
+
+import org.apache.ibatis.annotations.*;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+/**
+ * Created by $author on ${day}.
+ */
+@Repository("$mapper_bean_name")
+public interface $mapper_name {
+
+    @Insert("insert into $table_name ($fields_csv)" +
+            " values($fields_values)")
+    int insert($class_name $instance_name);
+
+    @Update("update $table_name set $fields_update" +
+            " where $pri_key=#{$pri_key}")
+    int update($class_name $instance_name);
+
+    @Delete("delete from $table_name")
+    int deleteAll();
+
+    @Delete("delete from $table_name where $pri_key=#{$pri_key}")
+    int deleteById(
+            @Param("$pri_key") int $pri_key
+    );
+
+    @Select("select count(1) from $table_name")
+    int countAll();
+
+    @Select("select * from $table_name where $pri_key=#{$pri_key}")
+    $class_name fetchById(
+            @Param("$pri_key") int $pri_key
+    );
+
+    @Select("select * from $table_name")
+    List<$class_name> fetchAll();
+}
