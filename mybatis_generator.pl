@@ -22,6 +22,7 @@ binmode STDOUT, ":utf8";
 my $config = AppConfig->new(
     'output_dir|o=s'  => { DEFAULT => 'outputJava' },
     'config_file|f=s' => { DEFAULT => 'config.ini' },
+    'schema|s=s'      => { DEFAULT => 'test' },
     'dsn|d=s',
     'package|p=s',
     'user|u=s'        => { DEFAULT => 'root' },
@@ -34,6 +35,7 @@ $config->file($config->config_file) if $config->config_file;
 my $outfile_dir = $config->output_dir;
 my $mapper_tmpl = 'mapper.tt';
 my $entity_tmpl = 'entity.tt';
+my $schema      = $config->schema;
 my $dsn         = $config->dsn;
 my $user        = $config->user;
 my $passwd      = $config->passwd;
@@ -60,7 +62,7 @@ fun gen_outfile_name($tbl) {
 my @tables = $dbh->tables;
 for (@tables) {
     s/.*\.`(.*)`/$1/;
-    my $sth     = $dbh->column_info(undef, 'yl_webim', $_, undef);
+    my $sth     = $dbh->column_info(undef, $schema, $_, undef);
     my $columns = $sth->fetchall_hashref(['TABLE_NAME', 'COLUMN_NAME']);
     # p $columns;
     while (my ($k, $v) = each %$columns) {
